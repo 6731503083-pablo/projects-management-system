@@ -82,4 +82,9 @@ public class Project {
         return tasks.isEmpty();
     }
 
+    @Override
+    public String toString() {
+        return id + "|" + name + "|" + deadline + "|" + status;
+    }
+
 }

@@ -1,4 +1,6 @@
+package model;
 import java.util.ArrayList;
+import model.enums.UserRoles;
 
 public class Developer extends User{
     private ArrayList<Task> assignedTasks;
