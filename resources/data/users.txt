@@ -1,10 +1,10 @@
 1|Zwe|zwe@email.com|PROJECT_MANAGER
 2|Myat|myat@email.com|PROJECT_MANAGER
-3|Aye|aye@email.com|PROJECT_MANAGER
-4|Linn|linn@email.com|PROJECT_MANAGER
+3|Linn|linn@email.com|PROJECT_MANAGER
+4|Aye|aye@email.com|PROJECT_MANAGER
 5|Phyo|phyo@email.com|PROJECT_MANAGER
 6|Win|win@email.com|DEVELOPER
 7|Kaung|kaung@email.com|DEVELOPER
-8|Aung|aung@email.com|DEVELOPER
-9|Kar|kar@email.com|DEVELOPER
+8|Kar|kar@email.com|DEVELOPER
+9|Aung|aung@email.com|DEVELOPER
 10|Zaw|zaw@email.com|DEVELOPER

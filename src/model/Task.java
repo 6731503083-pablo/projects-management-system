@@ -1,21 +1,27 @@
 package model;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int id;
     private String name;
     private String description;
     private String status;
     private int projectId;
+    private int userId;
     private Project project;
 
-    public Task(int id, String name, String description, String status, int projectId) {
+    public Task(int id, String name, String description, String status, int projectId, int userId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
         this.projectId = projectId;
+        this.userId = userId;
     }
+
     public Task(int id, String name, String description, String status, int projectId, Project project) {
         this.id = id;
         this.name = name;
@@ -75,6 +81,14 @@ public class Task {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
