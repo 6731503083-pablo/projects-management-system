@@ -99,5 +99,12 @@ public class FileHandler {
 
     public void deleteFile(String filePath) {
         // Implement file deletion logic here
+        File file = new File(filePath);
+        if (file.exists()){
+            file.delete();
+            System.out.println("File successfully deleted");
+        }else{
+            System.out.println("File doesn't exist");
+        }
     }
 }
