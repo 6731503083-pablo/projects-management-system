@@ -32,7 +32,7 @@ public class InputHandler {
             if (!str.trim().isEmpty()) {
                 return str;
             } else {
-                System.out.println("Invalid email. Please enter a valid email.");
+                System.out.println("Invalid input. Please try again.");
             }
         }
     }
