@@ -44,7 +44,8 @@ public class FileHandler {
     public static List<String> readFromFile(String filePath) {
         List<String> lines = new ArrayList<>();
         File file = new File(filePath);
-        file.getParentFile().mkdirs(); // Create parent directories if they don't exist
+        if (!file.exists()) return lines;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -71,9 +72,9 @@ public class FileHandler {
 
     public static void updateFile(String filePath, String oldData, String newData) {
         File file = new File(filePath);
-        file.getParentFile().mkdirs(); // Create parent directories if they don't exist
+        
         List<String> lines = new ArrayList<>();
-
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -98,6 +99,15 @@ public class FileHandler {
     }
 
     public void deleteFile(String filePath) {
+
         // Implement file deletion logic here
+        File file = new File(filePath);
+        if (file.exists()){
+            file.delete();
+            System.out.println("File successfully deleted");
+        }else{
+            System.out.println("File doesn't exist");
+        }
+
     }
 }
