@@ -17,9 +17,6 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<Project> viewAssignedProject() {
-        return null;
-    }
 
     public int getId() {
         return id;

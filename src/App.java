@@ -11,67 +11,84 @@ public class App {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nWelcome to the Project Management System!\n");
+
+        // infinite loop to keep the program running until the user chooses to exit
         while (true) {
+
+            // Read user data from file
             List<String> usersList = FileHandler.readFromFile("resources/data/users.txt");
+
+            // Get user email for login
             String email = InputHandler.getValidString(scanner, "Enter your email: ");
             String userRole = "";
+
+            // we used an array to store the userId because we need to modify it inside the
+            // loop
+            // and we cannot modify the value of a primitive type directly inside the loop.
             final int[] currentUserId = { -1 };
 
+            // Loop through the list of users to find the user with the entered email
             for (String user : usersList) {
-                String[] userDetails = user.split("\\|");
-                if (userDetails[2].equals(email)) {
-                    userRole = userDetails[3];
-                    currentUserId[0] = Integer.parseInt(userDetails[0]);
-                    break;
+                String[] userDetails = user.split("\\|"); // Split user details by delimiter '|'
+                if (userDetails[2].equals(email)) { // Check if the email matches
+                    userRole = userDetails[3]; // Assign the user's role
+                    currentUserId[0] = Integer.parseInt(userDetails[0]); // Assign the user's ID
+                    break; // Exit the loop once the user is found
                 }
             }
 
-            if (userRole.isEmpty()) {
+            if (userRole.isEmpty()) { // If no user is found with the entered email
                 System.out.println("\nUser not found. Please check your email.\n");
-                continue;
-            } else if (userRole.equals("PROJECT_MANAGER")) {
+                continue; // Ask for email again
+            } else if (userRole.equals("PROJECT_MANAGER")) { // If the user is a project manager
+
                 // project manager
                 System.out.println("\nWelcome Project Manager : " + email + "!");
 
+                // Infinite loop for project manager menu
                 while (true) {
+
                     @SuppressWarnings("unchecked")
                     List<Project> projectsList = (List<Project>) FileHandler
-                            .readObjectFromFile("resources/data/projects.dat");
+                            .readObjectFromFile("resources/data/projects.dat"); // Read projects from file
+
                     if (projectsList == null)
-                        projectsList = new ArrayList<>();
+                        projectsList = new ArrayList<>(); // Initialize projects list if null
 
                     System.out.println("\n1. Create a new project");
                     System.out.println("\n2. View all projects");
                     System.out.println("\n3. Exit\n");
 
-                    int choice = InputHandler.getValidInteger(scanner, "Enter your choice: ");
+                    int choice = InputHandler.getValidInteger(scanner, "Enter your choice: "); // Get user choice
 
                     if (choice == 1) {
+
                         // Input project data
                         String projectName = InputHandler.getValidString(scanner, "\nProject Name: ");
                         String projectDeadline = InputHandler.getValidString(scanner,
-                                "\nProject Deadline (DD-MM-YYYY): ");
-                        int projectId = projectsList.size() + 1;
+                                "\nProject Deadline (DD-MM-YYYY): ");// Get project deadline
+                        int projectId = projectsList.size() + 1; // Generate new project ID based on size
 
                         // Create and add new project
                         Project newProject = new Project(projectId, projectName, projectDeadline, "Unfinished");
-                        projectsList.add(newProject);
+                        projectsList.add(newProject); // Add new project to the list
 
                         // Write the entire updated list back to the file (overwrites)
                         FileHandler.writeObjectToFile("resources/data/projects.dat", projectsList);
 
                         System.out.println("\nProject created successfully!");
                         System.out.println("\nExiting back to the main menu...\n");
+                        // Pause for 3 seconds before going back to the main menu
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    } else if (choice == 2) {
+                    } else if (choice == 2) { // View all projects
 
-                        if (projectsList.isEmpty()) {
-                            System.out.println("\nNo projects found.\n");
-                            continue;
+                        if (projectsList.isEmpty()) { // Check if the projects list is empty
+                            System.out.println("\nNo projects found.\n"); // If empty, inform the user
+                            continue;// Go back to the main menu
                         } else {
                             System.out.println("\nProject ID | Project Name   | Project Deadline  | Project Status");
                             System.out.println("---------------------------------------------------------------");
@@ -81,11 +98,13 @@ public class App {
                                         project.getName(),
                                         project.getDeadline(),
                                         project.getStatus());
-                            }
+                            } // Display all projects
                         }
                         int projectId = InputHandler.getValidInteger(scanner,
-                                "\nEnter Project ID to view details (0 to go back): ");
-                        if (projectId == 0) {
+                                "\nEnter Project ID to view details (0 to go back): "); // Get project ID from user
+
+                        if (projectId == 0) {// If user enters 0, go back to the main menu
+                            // Pause for 3 seconds before going back to the main menu
                             System.out.println("\nExiting back to the main menu...\n");
                             try {
                                 Thread.sleep(3000);
@@ -94,18 +113,21 @@ public class App {
                             }
                             continue;
                         } else {
-                            if (projectId > 0 && projectId <= projectsList.size()) {
+                            if (projectId > 0 && projectId <= projectsList.size()) { // Check if the project ID is valid
                                 Project project = projectsList.get(projectId - 1); // Get the actual Project object
-                                boolean isFinished = project.getStatus().equalsIgnoreCase("Finished");
+                                boolean isFinished = project.getStatus().equalsIgnoreCase("Finished"); // Check if the
+                                                                                                       // project is
+                                                                                                       // finished
 
                                 System.out.println("\nProject ID: " + project.getId());
                                 System.out.println("\nProject Name: " + project.getName());
                                 System.out.println("\nProject Deadline: " + project.getDeadline());
                                 System.out.println("\nProject Status: " + project.getStatus());
                                 System.out.println("\n-----------------------------------------------------");
-                                if (isFinished) {
+                                if (isFinished) { // If the project is finished, inform the user
                                     System.out.println(
                                             "This project is already finished. No further actions can be taken.");
+                                    // Pause for 3 seconds before going back to the main menu
                                     System.out.println("\nExiting back to the main menu...\n");
                                     try {
                                         Thread.sleep(3000);
@@ -114,6 +136,8 @@ public class App {
                                     }
                                     continue;
                                 }
+
+                                // Display options for the project if not finished
                                 System.out.println("\n1. Mark project as finished\n");
                                 System.out.println("2. Create a task for this project\n");
                                 System.out.println("3. View tasks for this project\n");

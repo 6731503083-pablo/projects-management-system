@@ -11,7 +11,6 @@ public class Task implements Serializable {
     private String status;
     private int projectId;
     private int userId;
-    private Project project;
 
     public Task(int id, String name, String description, String status, int projectId, int userId) {
         this.id = id;
@@ -20,15 +19,6 @@ public class Task implements Serializable {
         this.status = status;
         this.projectId = projectId;
         this.userId = userId;
-    }
-
-    public Task(int id, String name, String description, String status, int projectId, Project project) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.projectId = projectId;
-        this.project = project;
     }
 
     public int getId() {
@@ -73,14 +63,6 @@ public class Task implements Serializable {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     public int getUserId() {
