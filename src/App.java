@@ -7,6 +7,7 @@ import util.InputHandler;
 import util.FileHandler;
 
 public class App {
+    @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception {
 
         Scanner scanner = new Scanner(System.in);
@@ -70,7 +71,8 @@ public class App {
                         int projectId = projectsList.size() + 1; // Generate new project ID based on size
 
                         // Create and add new project
-                        Project newProject = new Project(projectId, projectName, projectDeadline, "Unfinished");
+                        Project newProject = new Project(projectId, projectName, projectDeadline, "Unfinished",
+                                currentUserId[0]);
                         projectsList.add(newProject); // Add new project to the list
 
                         // Write the entire updated list back to the file (overwrites)
@@ -80,25 +82,42 @@ public class App {
                         System.out.println("\nExiting back to the main menu...\n");
                         // Pause for 3 seconds before going back to the main menu
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    } else if (choice == 2) { // View all projects
+                    } else if (choice == 2) {
+                        // fliter for current projec manager
+                        if (projectsList == null)
+                            projectsList = new ArrayList<>();
 
-                        if (projectsList.isEmpty()) { // Check if the projects list is empty
+                        // Filter projects for the current project manager
+                        List<Project> managerProjects = new ArrayList<>();
+                        for (Project project : projectsList) {
+                            if (project.getUserId() == currentUserId[0]) {
+                                managerProjects.add(project);
+                            }
+                        }
+
+                        if (managerProjects.isEmpty()) { // Check if the projects list is empty
                             System.out.println("\nNo projects found.\n"); // If empty, inform the user
+                            System.out.println("\nExiting back to the main menu...\n");
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             continue;// Go back to the main menu
                         } else {
                             System.out.println("\nProject ID | Project Name   | Project Deadline  | Project Status");
                             System.out.println("---------------------------------------------------------------");
-                            for (Project project : projectsList) {
+                            for (Project project : managerProjects) {
                                 System.out.printf("%-10d | %-14s | %-17s | %s%n",
                                         project.getId(),
                                         project.getName(),
                                         project.getDeadline(),
                                         project.getStatus());
-                            } // Display all projects
+                            } // Display project manager's own projects
                         }
                         int projectId = InputHandler.getValidInteger(scanner,
                                 "\nEnter Project ID to view details (0 to go back): "); // Get project ID from user
@@ -107,7 +126,7 @@ public class App {
                             // Pause for 3 seconds before going back to the main menu
                             System.out.println("\nExiting back to the main menu...\n");
                             try {
-                                Thread.sleep(3000);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -115,6 +134,18 @@ public class App {
                         } else {
                             if (projectId > 0 && projectId <= projectsList.size()) { // Check if the project ID is valid
                                 Project project = projectsList.get(projectId - 1); // Get the actual Project object
+                                // Check if the project belongs to the current project manager
+                                if (project.getUserId() != currentUserId[0]) {
+                                    System.out.println("\nThis project doesn't belong to you. Access denied.");
+                                    System.out.println("\nExiting back to the main menu...\n");
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    continue;
+                                }
+
                                 boolean isFinished = project.getStatus().equalsIgnoreCase("Finished"); // Check if the
                                                                                                        // project is
                                                                                                        // finished
@@ -130,7 +161,7 @@ public class App {
                                     // Pause for 3 seconds before going back to the main menu
                                     System.out.println("\nExiting back to the main menu...\n");
                                     try {
-                                        Thread.sleep(3000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -157,7 +188,7 @@ public class App {
                                     System.out.println("\nProject status updated to Finished!");
                                     System.out.println("\nExiting back to the main menu...");
                                     try {
-                                        Thread.sleep(3000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -205,9 +236,10 @@ public class App {
                                     System.out.println("\nTask created and saved successfully.");
                                 } else if (projectChoice == 3) {
                                     System.out.println("\nTasks for Project Name: " + chosenProject.getName());
-                                    System.out.println("-----------------------------------------------------");
-                                    System.out.printf("%-10s | %-20s | %-12s%n", "Task ID", "Task Name", "Task Status");
-                                    System.out.println("-----------------------------------------------------");
+                                    System.out.println("----------------------------------------------------------");
+                                    System.out.printf("%-10s | %-20s | %-12s | %-20s%n", "Task ID", "Task Name",
+                                            "Task Status", "Developer");
+                                    System.out.println("----------------------------------------------------------");
                                     @SuppressWarnings("unchecked")
                                     // Read all tasks from file
                                     List<Task> allTasks = (List<Task>) FileHandler
@@ -219,10 +251,20 @@ public class App {
                                     boolean hasTasks = false;
                                     for (Task task : allTasks) {
                                         if (task.getProjectId() == chosenProject.getId()) {
-                                            System.out.printf("%-10d | %-20s | %-12s%n",
+                                            // Find developer name using the userId from the task
+                                            String developerName = "Unknown";
+                                            for (String user : usersList) {
+                                                String[] userDetails = user.split("\\|");
+                                                if (Integer.parseInt(userDetails[0]) == task.getUserId()) {
+                                                    developerName = userDetails[1]; // Get developer name
+                                                    break;
+                                                }
+                                            }
+                                            System.out.printf("%-10d | %-20s | %-12s | %-20s%n",
                                                     task.getId(),
                                                     task.getName(),
-                                                    task.getStatus());
+                                                    task.getStatus(),
+                                                    developerName);
                                             hasTasks = true;
                                         }
                                     }
@@ -236,7 +278,7 @@ public class App {
                                     if (backToMenu != null && !backToMenu.isEmpty()) {
                                         System.out.println("\nExiting back to the main menu...");
                                         try {
-                                            Thread.sleep(3000);
+                                            Thread.sleep(1000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -246,7 +288,7 @@ public class App {
                                 } else if (projectChoice == 4) {
                                     System.out.println("\nExiting back to the main menu...");
                                     try {
-                                        Thread.sleep(3000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -314,21 +356,22 @@ public class App {
                         System.out.println("\nNo tasks found for this developer.");
                         System.out.println("\nExiting back to the main menu...");
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        break;
                     }
                     int taskId = InputHandler.getValidInteger(scanner,
                             "\nEnter Task ID to view details (0 to go back): ");
                     if (taskId == 0) {
                         System.out.println("\nExiting back to the main menu...");
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        continue;
+                        break;
                     }
                     Task task = allTasks.stream()
                             .filter(t -> t.getId() == taskId && t.getUserId() == currentUserId[0])
@@ -338,7 +381,7 @@ public class App {
                         System.out.println("Invalid Task ID. Please try again.");
                         System.out.println("\nExiting back to the main menu...");
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -378,7 +421,7 @@ public class App {
                         } else if (taskChoice == 3) {
                             System.out.println("\nExiting back to the main menu...");
                             try {
-                                Thread.sleep(3000);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -398,7 +441,7 @@ public class App {
                         } else if (taskChoice == 2) {
                             System.out.println("\nExiting back to the main menu...");
                             try {
-                                Thread.sleep(3000);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -424,7 +467,7 @@ public class App {
                     if (backToMenu != null && !backToMenu.isEmpty()) {
                         System.out.println("\nExiting back to the main menu...");
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

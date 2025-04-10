@@ -10,13 +10,15 @@ public class Project implements Serializable {
     private String deadline;
     private String status;
     private ArrayList<Integer> tasksId;
+    private int userId;
 
-    public Project(int id, String name, String deadline, String status) {
+    public Project(int id, String name, String deadline, String status, int userId) {
         this.id = id;
         this.name = name;
         this.deadline = deadline;
         this.status = status;
         this.tasksId = new ArrayList<>();
+        this.userId = userId;
     }
 
     public int getId() {
@@ -57,6 +59,13 @@ public class Project implements Serializable {
 
     public void setTasksId(ArrayList<Integer> tasksId) {
         this.tasksId = tasksId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
