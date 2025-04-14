@@ -34,7 +34,7 @@ public class TaskDAO {
         List<Task> userTasks = new ArrayList<>();
 
         for (Task task : allTasks) {
-            if (task.getUserId() == userId) {
+            if (task.getDevloperId() == userId) {
                 userTasks.add(task);
             }
         }

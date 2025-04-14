@@ -10,7 +10,7 @@ public class Task implements Serializable {
     private String description;
     private String status;
     private int projectId;
-    private int userId;
+    private int devloperId; // User ID of the developer assigned to the task
 
     public Task(int id, String name, String description, String status, int projectId, int userId) {
         this.id = id;
@@ -18,7 +18,7 @@ public class Task implements Serializable {
         this.description = description;
         this.status = status;
         this.projectId = projectId;
-        this.userId = userId;
+        this.devloperId = userId;
     }
 
     public int getId() {
@@ -65,12 +65,12 @@ public class Task implements Serializable {
         this.projectId = projectId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getDevloperId() {
+        return devloperId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setDevloperId(int userId) {
+        this.devloperId = userId;
     }
 
     @Override

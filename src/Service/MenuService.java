@@ -125,7 +125,7 @@ public class MenuService {
         }
         
         // Verify project ownership
-        if (project.getUserId() != userId) {
+        if (project.getProjectManagerId() != userId) {
             System.out.println("\nThis project doesn't belong to you. Access denied.");
             pauseExecution(1000, "\nExiting back to the main menu...\n");
             return;
@@ -225,7 +225,7 @@ public class MenuService {
         System.out.printf("%-10s | %-20s | %-12s | %-20s%n", "Task ID", "Task Name", "Task Status", "Developer");
         System.out.println("----------------------------------------------------------");
             for (Task task : projectTasks) {
-                String developerName = UserDAO.getUserNameById(task.getUserId());
+                String developerName = UserDAO.getUserNameById(task.getDevloperId());
                 System.out.printf("%-10d | %-20s | %-12s | %-20s%n",
                         task.getId(),
                         task.getName(),
@@ -297,7 +297,7 @@ public class MenuService {
     private static void handleTaskDetails(Scanner scanner, int taskId, int userId) {
         Task task = TaskDAO.getTaskById(taskId);
         
-        if (task == null || task.getUserId() != userId) {
+        if (task == null || task.getDevloperId() != userId) {
             System.out.println("Invalid Task ID. Please try again.");
             pauseExecution(1000, "\nExiting back to the main menu...");
             return;

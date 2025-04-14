@@ -21,7 +21,7 @@ public class ProjectDAO {
         List<Project> userProjects = new ArrayList<>();
 
         for (Project project : allProjects) {
-            if (project.getUserId() == userId) {
+            if (project.getProjectManagerId() == userId) {
                 userProjects.add(project);
             }
         }
