@@ -46,7 +46,7 @@ public class MenuService {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\nInvalid choice. Please try again.");
             }
         }
     }
@@ -83,15 +83,19 @@ public class MenuService {
         }
         
         // Display projects
-        System.out.println("\nProject ID | Project Name   | Project Deadline  | Project Status");
+        System.out.println("\nThese are the projects you have created: ");
         System.out.println("---------------------------------------------------------------");
-        for (Project project : managerProjects) {
+        System.out.printf("%-10s | %-14s | %-17s | %s%n", "Project ID", "Project Name", "Project Deadline", "Project Status");
+        System.out.println("---------------------------------------------------------------");
+       for (Project project : managerProjects) {
             System.out.printf("%-10d | %-14s | %-17s | %s%n",
                     project.getId(),
                     project.getName(),
                     project.getDeadline(),
                     project.getStatus());
         }
+
+        System.out.println("---------------------------------------------------------------");
         
         // Get project selection
         int projectId = InputHandler.getValidInteger(scanner, 
@@ -192,6 +196,8 @@ public class MenuService {
             System.out.printf("%-10s | %-20s | %-12s%n", 
                     developer[0], developer[1], developer[3]);
         }
+
+        System.out.println("-----------------------------------------------------");
         
         int developerId = InputHandler.getValidInteger(scanner, "\nEnter the User ID of the developer: ");
         
@@ -208,15 +214,16 @@ public class MenuService {
      */
     private static void viewTasksForProject(Scanner scanner, Project project) {
         System.out.println("\nTasks for Project Name: " + project.getName());
-        System.out.println("----------------------------------------------------------");
-        System.out.printf("%-10s | %-20s | %-12s | %-20s%n", "Task ID", "Task Name", "Task Status", "Developer");
-        System.out.println("----------------------------------------------------------");
+        
         
         List<Task> projectTasks = TaskDAO.getTasksByProjectId(project.getId());
         
         if (projectTasks.isEmpty()) {
             System.out.println("\nNo tasks found for this project.");
         } else {
+            System.out.println("----------------------------------------------------------");
+        System.out.printf("%-10s | %-20s | %-12s | %-20s%n", "Task ID", "Task Name", "Task Status", "Developer");
+        System.out.println("----------------------------------------------------------");
             for (Task task : projectTasks) {
                 String developerName = UserDAO.getUserNameById(task.getUserId());
                 System.out.printf("%-10d | %-20s | %-12s | %-20s%n",
@@ -225,7 +232,9 @@ public class MenuService {
                         task.getStatus(),
                         developerName);
             }
+            System.out.println("----------------------------------------------------------");
         }
+        
         
         System.out.print("\nEnter any key to go back to the main menu: ");
         String backToMenu = scanner.nextLine();
@@ -245,7 +254,7 @@ public class MenuService {
             
             if (developerTasks.isEmpty()) {
                 System.out.println("\nNo tasks found for this developer.");
-                pauseExecution(1000, "\nExiting back to the main menu...");
+                pauseExecution(1000, "\nExiting back to the main menu...\n");
                 return;
             }
             
@@ -263,12 +272,14 @@ public class MenuService {
                         projectName,
                         task.getStatus());
             }
+
+            System.out.println("--------------------------------------------------------------------------");
             
             // Get task selection
             int taskId = InputHandler.getValidInteger(scanner, "\nEnter Task ID to view details (0 to go back): ");
             
             if (taskId == 0) {
-                pauseExecution(1000, "\nExiting back to the main menu...");
+                pauseExecution(1000, "\nExiting back to the main menu...\n");
                 return;
             }
             
@@ -295,16 +306,17 @@ public class MenuService {
         // Display task details
         String projectName = ProjectDAO.getProjectNameById(task.getProjectId());
         System.out.println("-----------------------------------------------------");
-        System.out.printf("%-10s | %-20s | %-20s | %-12s | %-20s%n",
-                "Task ID", "Task Name", "Project Name", "Task Status", "Task Description");
+        System.out.printf("%-20s | %-20s | %-12s | %-20s%n",
+                 "Task Name", "Project Name", "Task Status", "Task Description");
         System.out.println("-----------------------------------------------------------------------------------------");
         
-        System.out.printf("%-10d | %-20s | %-20s | %-12s | %-20s%n",
-                task.getId(),
+        System.out.printf("%-20s | %-20s | %-12s | %-20s%n",
                 task.getName(),
                 projectName,
                 task.getStatus(),
                 task.getDescription());
+
+        System.out.println("-----------------------------------------------------------------------------------------");
         
         // Display options based on task status
         String taskStatus = task.getStatus();
@@ -352,7 +364,7 @@ public class MenuService {
         System.out.print("\nEnter any key to go back to the main menu: ");
         String backToMenu = scanner.nextLine();
         if (backToMenu != null) {
-            pauseExecution(1000, "\nExiting back to the main menu...");
+            pauseExecution(1000, "\nExiting back to the main menu...\n");
         }
     }
     
