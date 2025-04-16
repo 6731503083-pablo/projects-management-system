@@ -12,6 +12,11 @@ public class Task implements Serializable {
     private int projectId;
     private int devloperId; // User ID of the developer assigned to the task
 
+    public Task(){
+        //default constructor
+    }
+
+    //full constructor 
     public Task(int id, String name, String description, String status, int projectId, int userId) {
         this.id = id;
         this.name = name;
@@ -21,6 +26,15 @@ public class Task implements Serializable {
         this.devloperId = userId;
     }
 
+    // Constructor without ID (e.g., auto-generated)
+    public Task(String name, String description, String status, int projectId, int userId) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.projectId = projectId;
+        this.devloperId = userId;
+    }
+    
     public int getId() {
         return id;
     }

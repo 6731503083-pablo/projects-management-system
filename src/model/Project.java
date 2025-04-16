@@ -12,8 +12,22 @@ public class Project implements Serializable {
     private ArrayList<Integer> tasksId;
     private int projectManagerId; // User ID of the project manager
 
+    public Project(){
+        //default constructor
+    }
+
+    // full parameter constructor
     public Project(int id, String name, String deadline, String status, int userId) {
         this.id = id;
+        this.name = name;
+        this.deadline = deadline;
+        this.status = status;
+        this.tasksId = new ArrayList<>();
+        this.projectManagerId = userId;
+    }
+
+    // Constructor without ID (for auto-generated )
+    public Project(String name, String deadline, String status, int userId) {
         this.name = name;
         this.deadline = deadline;
         this.status = status;
