@@ -10,15 +10,29 @@ public class Project implements Serializable {
     private String deadline;
     private String status;
     private ArrayList<Integer> tasksId;
-    private int userId;
+    private int projectManagerId; // User ID of the project manager
 
+    public Project(){
+        //default constructor
+    }
+
+    // full parameter constructor
     public Project(int id, String name, String deadline, String status, int userId) {
         this.id = id;
         this.name = name;
         this.deadline = deadline;
         this.status = status;
         this.tasksId = new ArrayList<>();
-        this.userId = userId;
+        this.projectManagerId = userId;
+    }
+
+    // Constructor without ID (for auto-generated )
+    public Project(String name, String deadline, String status, int userId) {
+        this.name = name;
+        this.deadline = deadline;
+        this.status = status;
+        this.tasksId = new ArrayList<>();
+        this.projectManagerId = userId;
     }
 
     public int getId() {
@@ -61,11 +75,11 @@ public class Project implements Serializable {
         this.tasksId = tasksId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getProjectManagerId() {
+        return projectManagerId;
     }
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setProjectManagerId(int userId) {
+        this.projectManagerId = userId;
     }
 
     @Override
